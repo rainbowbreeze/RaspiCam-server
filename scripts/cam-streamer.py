@@ -1,4 +1,4 @@
-"""A Python script to stream Raspi Camera output
+"""A Python script to stream Raspi Camera output, and capture frames
 
 Really inspited by Picamera recipe at https://picamera.readthedocs.io/en/release-1.13/recipes2.html#web-streaming
 
@@ -71,7 +71,7 @@ class StreamingHandler(server.BaseHTTPRequestHandler):
             self.send_header('Content-Type', 'multipart/x-mixed-replace; boundary=FRAME')
             self.end_headers()
             try:
-                output = self.server.output
+                output = self.server._output
                 while True:
                     with output.condition:
                         output.condition.wait()
@@ -93,7 +93,7 @@ class StreamingHandler(server.BaseHTTPRequestHandler):
                 # Create a filename using current date
                 d = datetime.datetime.now()
                 filename = "pictures/picture_{:%Y%m%d-%H%M%S.jpg}".format(d)
-                self.server.camera.capture(filename, use_video_port = True)
+                self.server._camera.capture(filename, use_video_port = True)
                 message = "Saved current frame to " + filename
                 self.send_response(200)
                 self.send_header('Content-Type', 'text/plain')
@@ -101,6 +101,7 @@ class StreamingHandler(server.BaseHTTPRequestHandler):
                 self.end_headers()
                 self.wfile.write(message.encode('utf-8'))
                 self.log_message(message)
+                #TODO return the image instead of a text
 
             except Exception as err:
                 error_message = "Error while saving picture: {0}".format(err)
@@ -113,7 +114,7 @@ class StreamingHandler(server.BaseHTTPRequestHandler):
 
 
 class StreamingServer(socketserver.ThreadingMixIn, server.HTTPServer):
-    """Class to stream
+    """Class to stream the camera, with some enhancements
 
     The class stores also instance variable used by the Handler to complete some requests.
     In particular, the PiCamera StreamingOutput object, and the PiCamera module itself
@@ -124,8 +125,13 @@ class StreamingServer(socketserver.ThreadingMixIn, server.HTTPServer):
     daemon_threads = True
 
     def __init__(self, output, picamera, *args, **kwargs):
-        self.output = output
-        self.camera = picamera
+        """Add o
+
+        :param StreamingOutput output: the streaming output
+        :param picamera picamera: the picamera object used to capture the video
+        """
+        self._output = output
+        self._camera = picamera
         super().__init__(*args, **kwargs)
 
 
