@@ -145,7 +145,11 @@ class StreamingServer(socketserver.ThreadingMixIn, server.HTTPServer):
 
 
     
-def main(argv):
+def main(script_name, argv):
+    """
+    :param str script_name: the name of this script
+    :param object argv: the array with the command line arguments
+    """
     output_folder = None
     
     # Read command line arguments
@@ -183,4 +187,4 @@ def main(argv):
 
 
 if __name__ == "__main__":
-    main(sys.argv[1:])
+    main(sys.argv[0], sys.argv[1:])
