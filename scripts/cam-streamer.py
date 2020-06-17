@@ -2,6 +2,9 @@
 
 Really inspited by Picamera recipe at https://picamera.readthedocs.io/en/release-1.13/recipes2.html#web-streaming
 
+Method documentation uses the Sphinx markup, a de-facto standard
+ https://www.sphinx-doc.org/en/master/usage/restructuredtext/domains.html#python-signatures
+
 
 Author: Alfredo -Rainbowbreeze- Morresi
 """
@@ -125,10 +128,10 @@ class StreamingServer(socketserver.ThreadingMixIn, server.HTTPServer):
     daemon_threads = True
 
     def __init__(self, output, picamera, *args, **kwargs):
-        """Add o
+        """Adding a could of variables to the standard constructor
 
-        :param StreamingOutput output: the streaming output
-        :param picamera picamera: the picamera object used to capture the video
+        :param StreamingOutput output: the streaming output used by PiCamera
+        :param picamera picamera: the PiCamera object itself
         """
         self._output = output
         self._camera = picamera
@@ -139,14 +142,14 @@ class StreamingServer(socketserver.ThreadingMixIn, server.HTTPServer):
 def main():
     with picamera.PiCamera() as camera:
         # It's a RaspiCam 1.3, so the following resolution is the max available
-        #  to obtain full FoV
         # https://picamera.readthedocs.io/en/release-1.13/fov.html#camera-modes
+        #  to obtain full FoV
         camera.resolution = (2592, 1944)
         # Max 15 frames at this resolution
         camera.framerate = 12
         output = StreamingOutput()
         # Start the streaming. Because the page shows the camera output at
-        #  800x600, the resize is done on-the-fly directly by the camera
+        #  800x600, the resize is done on-the-fly, directly by the camera
         # https://picamera.readthedocs.io/en/release-1.13/recipes1.html#capturing-resized-images
         camera.start_recording(output, format='mjpeg', resize=(800, 600))
         try:
