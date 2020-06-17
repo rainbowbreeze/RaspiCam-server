@@ -1,6 +1,11 @@
+"""A Python script to stream Raspi Camera output
+
+Really inspited by Picamera recipe at https://picamera.readthedocs.io/en/release-1.13/recipes2.html#web-streaming
+
+
+Author: Alfredo -Rainbowbreeze- Morresi
 """
 
-"""
 import io
 import picamera
 import logging
@@ -12,11 +17,11 @@ from http import server
 PAGE="""\
 <html>
 <head>
-<title>picamera MJPEG streaming demo</title>
+<title>PiCamera MJPEG streaming</title>
 </head>
 <body>
-<h1>PiCamera MJPEG Streaming Demo</h1>
-<img src="stream.mjpg" width="640" height="480" />
+<h1>PiCamera MJPEG Streaming</h1>
+<img src="stream.mjpg" width="800" height="600" />
 </body>
 </html>
 """
@@ -127,10 +132,16 @@ class StreamingServer(socketserver.ThreadingMixIn, server.HTTPServer):
     
 def main():
     with picamera.PiCamera() as camera:
+        # It's a RaspiCam 1.3, so the following resolution is the max available
+        #  to obtain full FoV
+        # https://picamera.readthedocs.io/en/release-1.13/fov.html#camera-modes
         camera.resolution = (2592, 1944)
-        camera.framerate = 10
-        camera.annotate_text = 'Hello world!'
+        # Max 15 frames at this resolution
+        camera.framerate = 12
         output = StreamingOutput()
+        # Start the streaming. Because the page shows the camera output at
+        #  800x600, the resize is done on-the-fly directly by the camera
+        # https://picamera.readthedocs.io/en/release-1.13/recipes1.html#capturing-resized-images
         camera.start_recording(output, format='mjpeg', resize=(800, 600))
         try:
             address = ('', 8000)
@@ -142,5 +153,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-
