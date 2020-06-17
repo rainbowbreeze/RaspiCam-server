@@ -97,7 +97,7 @@ class StreamingHandler(server.BaseHTTPRequestHandler):
             try:
                 # Create a filename using current date
                 d = datetime.datetime.now()
-                filename = "{0}/picture_{:%Y%m%d-%H%M%S.jpg}".format(self.server._output_folder, d)
+                filename = self.server._output_folder + "picture_{:%Y%m%d-%H%M%S.jpg}".format(d)
                 self.server._camera.capture(filename, use_video_port = True)
                 message = "Saved current frame to " + filename
                 self.send_response(200)
