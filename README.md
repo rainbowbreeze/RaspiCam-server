@@ -22,7 +22,7 @@ After=network.target
 [Service]
 Type=simple
 Restart=always
-ExecStart=python3 %Your_script_dir%/cam-streamer.py -f %folder_where_download_pictures%
+ExecStart=python3 %Your_script_dir%/cam-streamer.py --folder %folder_where_download_pictures%
 
 [Install]
 WantedBy=multi-user.target
