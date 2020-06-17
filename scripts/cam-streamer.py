@@ -163,6 +163,7 @@ def main(script_name, argv):
         if opt in ("-f", "--folder"):
             output_folder = arg
 
+    print("Starting the PiCam server, saving pictures under {0}".format(output_folder))
     logging.info("Starting the PiCam server, saving pictures under {0}".format(output_folder))
     #TODO check for the output folder and, in case, create it
 
