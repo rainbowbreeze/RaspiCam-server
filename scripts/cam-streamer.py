@@ -157,9 +157,9 @@ def main(argv):
 
     for opt, arg in opts:
         if opt in ("-f", "--folder"):
-            _output_folder = arg
+            output_folder = arg
 
-    logging.info("Starting the PiCam server, saving pictures under {0}".format(_output_folder))
+    logging.info("Starting the PiCam server, saving pictures under {0}".format(output_folder))
     #TODO check for the output folder and, in case, create it
 
     with picamera.PiCamera() as camera:
