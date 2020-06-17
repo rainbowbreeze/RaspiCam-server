@@ -108,7 +108,7 @@ class StreamingHandler(server.BaseHTTPRequestHandler):
 
 
 class StreamingServer(socketserver.ThreadingMixIn, server.HTTPServer):
-    """Creates a basic serverA
+    """Class to stream
 
     The class stores also instance variable used by the Handler to complete some requests.
     In particular, the PiCamera StreamingOutput object, and the PiCamera module itself
@@ -118,7 +118,7 @@ class StreamingServer(socketserver.ThreadingMixIn, server.HTTPServer):
     allow_reuse_address = True
     daemon_threads = True
 
-    def __init__(self, *args, output, picamera, **kwargs):
+    def __init__(self, output, picamera, *args, **kwargs):
         self.output = output
         self.camera = picamera
         super().__init__(*args, **kwargs)
@@ -134,7 +134,7 @@ def main():
         camera.start_recording(output, format='mjpeg', resize=(800, 600))
         try:
             address = ('', 8000)
-            server = StreamingServer(address, StreamingHandler, output = output, picamera = camera)
+            server = StreamingServer(output, camera, address, StreamingHandler)
             server.serve_forever()
         finally:
             camera.stop_recording()
