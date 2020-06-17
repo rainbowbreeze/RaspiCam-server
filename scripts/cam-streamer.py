@@ -10,10 +10,12 @@ Author: Alfredo -Rainbowbreeze- Morresi
 """
 
 import io
-import picamera
+import sys
+import getopt
 import logging
 import socketserver
 import datetime
+import picamera
 from threading import Condition
 from http import server
 
@@ -95,7 +97,7 @@ class StreamingHandler(server.BaseHTTPRequestHandler):
             try:
                 # Create a filename using current date
                 d = datetime.datetime.now()
-                filename = "pictures/picture_{:%Y%m%d-%H%M%S.jpg}".format(d)
+                filename = "{0}/picture_{:%Y%m%d-%H%M%S.jpg}".format(self.server._output_folder, d)
                 self.server._camera.capture(filename, use_video_port = True)
                 message = "Saved current frame to " + filename
                 self.send_response(200)
@@ -127,19 +129,39 @@ class StreamingServer(socketserver.ThreadingMixIn, server.HTTPServer):
     allow_reuse_address = True
     daemon_threads = True
 
-    def __init__(self, output, picamera, *args, **kwargs):
+    def __init__(self, output, picamera, output_folder, *args, **kwargs):
         """Adding a could of variables to the standard constructor
 
         :param StreamingOutput output: the streaming output used by PiCamera
-        :param picamera picamera: the PiCamera object itself
+        :param PiCamera picamera: the PiCamera object itself
+        :param str output_folder: the folder where images will be saved
         """
         self._output = output
         self._camera = picamera
+        self._output_folder = output_folder
+        if self._output_folder[-1] != "/":
+            self._output_folder = self._output_folder + "/"
         super().__init__(*args, **kwargs)
 
 
     
-def main():
+def main(argv):
+    output_folder = None
+    
+    # Read command line arguments
+    try:
+        opts, args = getopt.getopt(argv, "f:", ["folder="])
+    except getopt.GetoptError:
+        print("Please specify the --folder (or -f) argument, the folder where to save the pictures")
+        sys.exit(2)
+
+    for opt, arg in opts:
+        if opt in ("-f", "--folder"):
+            _output_folder = arg
+
+    logging.info("Starting the PiCam server, saving pictures under {0}".format(_output_folder))
+    #TODO check for the output folder and, in case, create it
+
     with picamera.PiCamera() as camera:
         # It's a RaspiCam 1.3, so the following resolution is the max available
         # https://picamera.readthedocs.io/en/release-1.13/fov.html#camera-modes
@@ -154,11 +176,11 @@ def main():
         camera.start_recording(output, format='mjpeg', resize=(800, 600))
         try:
             address = ('', 8000)
-            server = StreamingServer(output, camera, address, StreamingHandler)
+            server = StreamingServer(output, camera, output_folder, address, StreamingHandler)
             server.serve_forever()
         finally:
             camera.stop_recording()
 
 
 if __name__ == "__main__":
-    main()
+    main(sys.argv[1:])
