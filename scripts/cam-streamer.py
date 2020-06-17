@@ -143,6 +143,8 @@ class StreamingServer(socketserver.ThreadingMixIn, server.HTTPServer):
             self._output_folder = self._output_folder + "/"
         super().__init__(*args, **kwargs)
 
+def usage():
+    logging.warning("Please specify the --folder (or -f) argument, the folder where to save the pictures")
 
     
 def main(script_name, argv):
@@ -156,12 +158,16 @@ def main(script_name, argv):
     try:
         opts, args = getopt.getopt(argv, "f:", ["folder="])
     except getopt.GetoptError:
-        print("Please specify the --folder (or -f) argument, the folder where to save the pictures")
+        usage()
         sys.exit(2)
 
     for opt, arg in opts:
         if opt in ("-f", "--folder"):
             output_folder = arg
+
+    if None == output_folder:
+        usage()
+        sys.exit(2)
 
     print("Starting the PiCam server, saving pictures under {0}".format(output_folder))
     logging.info("Starting the PiCam server, saving pictures under {0}".format(output_folder))
