@@ -17,7 +17,7 @@ check_for_rainbow_notify_and_curl()  {
 main() {
     # call the RaspiCam Server with the url to save the current frame
     #curl http://127.0.0.1:8000/capture.html
-    curl --fail http://192.168.110.83:8000/capture.html
+    curl --fail http://localhost:8000/capture.html
 
     local result_code=$?
     echo "Result code: ${result_code}"
