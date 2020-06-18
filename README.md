@@ -61,13 +61,16 @@ First, check the script has execution permission
 chmod +x %Your_script_dir%/capture_frame.sh
 ```
 
-The following examples runs at every 15th minute past every hour from 7 through 18 on every day-of-week from Monday through Saturday.
-
+Then, edit the crontab (user or root, up to you to decide)
+```
 crontab -e  
 ```
+
+And add this command
+```
+# Runs at every 15th minute past every hour from 7 through 18 on every day-of-week from Monday through Saturday.
 */15 7-18 * * 1-6 %Your_script_dir%/capture_frame.sh
 ```
-
 
 
 Some links on how to manage cronjobs
