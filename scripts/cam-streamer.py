@@ -93,7 +93,6 @@ class StreamingHandler(server.BaseHTTPRequestHandler):
                     self.client_address, str(e))
 
         elif self.path == '/capture.html':
-            
             try:
                 # Create a filename using current date
                 d = datetime.datetime.now()
@@ -107,7 +106,6 @@ class StreamingHandler(server.BaseHTTPRequestHandler):
                 self.wfile.write(message.encode('utf-8'))
                 self.log_message(message)
                 #TODO return the image instead of a text
-
             except Exception as err:
                 error_message = "Error while saving picture: {0}".format(err)
                 self.send_error(500, message=error_message)  # Internal Server Error
