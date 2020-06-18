@@ -56,12 +56,16 @@ https://indomus.it/guide/come-installare-e-configurare-home-assistant-su-un-rasp
 ## Capturing images at given time
 In order to capture images at a given time (for example, for a timelapse), create a cronjob for the given interval.
 
+First, check the script has execution permission
+```
+chmod +x %Your_script_dir%/capture_frame.sh
+```
+
 The following examples runs at every 15th minute past every hour from 7 through 18 on every day-of-week from Monday through Saturday.
 
 crontab -e
 */15 7-18 * * 1-6 %Your_script_dir%/capture_frame.sh
 
-*/15 7-18 * * 1-6 /home/rainbowbreeze/raspicam-server/scripts/capture_frame.sh
 
 
 Some links on how to manage cronjobs
