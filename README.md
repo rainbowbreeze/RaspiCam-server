@@ -5,7 +5,7 @@ A server + utils to manage a Raspberry Pi Camera
 ## Installation
 To run the server, please refer to [Picamera install guide](https://picamera.readthedocs.io/en/release-1.13/install.html). But, in theory, the system should be already configured to run the server
 
-For the additional commands (capture an image using a cronjob, backup of images), the following packages are required
+For the additional commands (capture an image using a cronjob, backup of images), the following packages are required  
 curl, rsync
 
 
@@ -63,8 +63,10 @@ chmod +x %Your_script_dir%/capture_frame.sh
 
 The following examples runs at every 15th minute past every hour from 7 through 18 on every day-of-week from Monday through Saturday.
 
-crontab -e
+crontab -e  
+```
 */15 7-18 * * 1-6 %Your_script_dir%/capture_frame.sh
+```
 
 
 
