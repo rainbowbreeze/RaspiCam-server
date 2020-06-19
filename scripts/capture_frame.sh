@@ -28,8 +28,7 @@ main() {
     if [ "$result_code" = "0" ]; then
         echo "Error with result code: ${result_code}"
         # Some error happened
-        rainbow-notfy-admin.sh "Cannot extract a frame from the camera, error code $result_code"
-        #/usr/local/bin/rainbow-notifyadmin.sh
+        /usr/local/bin/rainbow-notfy-admin.sh "Cannot extract a frame from the camera, error code $result_code"
     fi
 }
 
