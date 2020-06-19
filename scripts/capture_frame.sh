@@ -7,7 +7,7 @@ check_for_rainbow_notify_and_curl()  {
     echo "rainbow-notifyadmin.sh command not found, quit" 
     exit 2
   fi
-  if ! hash curl --version 2>/dev/null; then
+  if ! hash curl 2>/dev/null; then
     echo "curl command not found, quit" 
     exit 2
   fi
