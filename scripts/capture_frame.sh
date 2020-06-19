@@ -25,10 +25,10 @@ main() {
     #  desired
     #  The  -f, --fail has to be used to obtain the status code. Otherwise
     #   it's always 0, regardless the server error
-    if [ "$result_code" = "0" ]; then
+    if [ ! "$result_code" = "0" ]; then
         echo "Error with result code: ${result_code}"
         # Some error happened
-        rainbow-notifyadmin.sh "Cannot extract a frame from the camera, error code $result_code"
+        rainbow-notifyadmin.sh "Cannot extract a frame from the camera, error code ${result_code}"
     fi
 }
 
