@@ -20,13 +20,13 @@ main() {
     curl --fail http://localhost:8000/capture.html
 
     local result_code=$?
-    echo "Result code: ${result_code}"
     # As per curl exit statuses at https://ec.haxx.se/usingcurl/usingcurl-returns ,
     #  22 is used when something goes wrong server side, and no output is
     #  desired
     #  The  -f, --fail has to be used to obtain the status code. Otherwise
     #   it's always 0, regardless the server error
     if [ ! "$result_code" = "0" ]; then
+        echo "Error with result code: ${result_code}"
         # Some error happened
         rainbow-notfy-admin.sh "Cannot extract a frame from the camera, error code $result_code"
         #/usr/local/bin/rainbow-notifyadmin.sh
