@@ -16,8 +16,8 @@ check_for_rainbow_notify_and_curl()  {
 
 main() {
     # call the RaspiCam Server with the url to save the current frame
-    #curl http://127.0.0.1:8000/capture.html
-    curl --fail http://localhost:8000/capture.html 2>/dev/null;
+    # with localhost, it doesn't work
+    curl --fail http://127.0.0.1:8000/capture.html
 
     local result_code=$?
     # As per curl exit statuses at https://ec.haxx.se/usingcurl/usingcurl-returns ,
@@ -33,5 +33,6 @@ main() {
 }
 
 
-check_for_rainbow_notify_and_curl
+# Commented, my suspect is it doesn't work
+# check_for_rainbow_notify_and_curl
 main
